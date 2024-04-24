@@ -1,0 +1,38 @@
+server:
+  port: 1020
+eureka:
+  client:
+    serviceUrl: #指向Eureka服务端地址
+      defaultZone: http://localhost:1010/eureka/
+    registry-fetch-interval-seconds: 2 #服务发现的间隔时间
+  instance:
+    prefer-ip-address: true #开启用IP注册
+    instance-id: hrm-zuul:1020 #自定义实例ID
+
+spring:
+  application:
+    name: hrm-zuul #服务名
+
+zuul:
+  ribbon:
+    eager-load:
+      enabled:  true #饥饿加载
+  retryable: true #是否开启重试功能
+  ignoredServices: "*"  #禁用掉使用浏览器通过服务名的方式访问服务
+  prefix: "/hrm"  #统一访问前缀
+  routes:
+    hrm-admin: "/admin/**" #每一个微服务的唯一服务名称
+
+ribbon:
+  MaxAutoRetries: 1 #对当前服务的重试次数
+  MaxAutoRetriesNextServer: 1 #切换相同Server的次数
+  OkToRetryOnAllOperations: false  	#是否所有操作都重试，因为针对post请求如果没做幂等处理可能会造成数据多次添加/修改
+  ConnectTimeout: 5000 #链接超时时间
+  ReadTimeout: 5000 #读取超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 15000 #hystrix超时,置thread和semaphore两种隔离策略的超时时间

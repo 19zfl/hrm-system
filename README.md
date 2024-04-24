@@ -1,4 +1,4 @@
-# system-hrm
+# hrm-system
 基于SpringCloud的人力资源管理系统
 
 #### 技术栈
